@@ -1,0 +1,52 @@
+{
+  "name": "find-bitmi-desktop",
+  "version": "1.0.0",
+  "description": "desktop app to find a Bitmi2 printer in the local network",
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "install-app-deps",
+    "start": "npm install && electron ./app",
+    "pack": "build --dir",
+    "dist": "build"
+  },
+  "author": "Bitmi Technologies",
+  "license": "GPL-3.0-or-later",
+  "build": {
+    "appId": "find-bitmi-desktop",
+    "category": "bitmi.3d.printing",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "squirrel",
+      "icon": "build/icon.ico"
+    }
+  },
+  "dependencies": {
+    "electron": "^4.0.1",
+    "electron-fetch": "^1.3.0",
+    "ip": "^1.1.5",
+    "materialize-css": "^1.0.0",
+    "npm": "^6.6.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^20.38.5"
+  }
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF8">
+    <title>Find My Bitmi</title>
+    <link rel="stylesheet" href="node_modules/materialize-css/dist/css/materialize.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <p>Look for a Bitmi in the local network (LAN):</p>
+    <div>
+        <input type='button' id='submit' value='Search' class="btn btn-primary"></input>
+    </div>
+    <div id='results'></div>
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+        const { shell } = require('electron');
+
+        const results = document.getElementById('results');
+        const btn = document.getElementById('submit');
+
+        ipcRenderer.on('item:add', (e, ipToAdd) => {
+            const el = document.createElement("span");
+            el.innerHTML = ipToAdd;
+            el.onclick = (e) => {
+                shell.openExternal(ipToAdd);
+            };
+            el.className = 'collection-item hyperlink';
+            results.className = 'collection';
+            results.appendChild(el);
+        });
+
+        ipcRenderer.on('item:clear', () => {
+            results.innerHTML = '';
+            results.className = '';
+        });
+
+        let ipComponents = ['192', '168', '1'];
+
+        btn.addEventListener('click', (e) => {
+            const el = document.createElement("p");
+            el.innerHTML = '<span>Found bitmis:</span>';
+            el.className = 'collection-item';
+            ipcRenderer.send('ping');
+
+            // ensure to have the message as the first child
+            if (results.childElementCount > 0) {
+                results.insertBefore(el, results.firstChild);
+            } else {
+                results.appendChild(el);
+            }
+        });
+    </script>
+</body>
+</html>
